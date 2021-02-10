@@ -5,7 +5,15 @@ import math
 from matplotlib import pyplot as plt
 from scipy.interpolate import interp1d
 import statistics
+import sys
 
+def re_transform(phases,amplitude):
+    x,y = cv.polarToCart(amplitude,phases)
+    back = cv.merge([x, y])
+    back_ishift = np.fft.ifftshift(back)
+    img_back = cv.idft(back_ishift)
+    img_back = cv.magnitude(img_back[:,:,0], img_back[:,:,1])
+    return img_back
 
 def transform(img):
     dft = cv.dft(np.float32(img),flags = cv.DFT_COMPLEX_OUTPUT)
@@ -16,19 +24,10 @@ def phases_amplitude(matrix):
     amplitude,phases = cv.cartToPolar(dft_shift[:,:,0],dft_shift[:,:,1])
     return phases,amplitude
 
-def re_transform(phases,amplitude):
-    x,y = cv.polarToCart(amplitude,phases)
-    back = cv.merge([x, y])
-    back_ishift = np.fft.ifftshift(back)
-    img_back = cv.idft(back_ishift)
-    img_back = cv.magnitude(img_back[:,:,0], img_back[:,:,1])
-    return img_back
-
-
-img_1 = cv.imread("messi.jpg",0)
-img_2 = cv.imread("flor.png",0)
+img_1 = cv.imread("Source/kobe.jpg",0)
+img_2 = cv.imread("Source/beagle.png",0)
 if img_1 is None or img_2 is None:
-    sys.exit("Could not read he image.")
+    sys.exit("Could not read one of the images.")
 
 matrix_1 = transform(img_1)
 matrix_2 = transform(img_2)

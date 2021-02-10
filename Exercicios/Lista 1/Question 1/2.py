@@ -3,12 +3,12 @@ import cv2 as cv
 from matplotlib import pyplot as plt
 
 
-img = cv.imread('sunflower.jpg')
+img = cv.imread('landscape.png')
 color = ('b','g','r')
 plt.figure()
-for i,col in enumerate(color):
-    histr = cv.calcHist([img],[i],None,[256],[0,256])
-    plt.plot(histr,color = col)
+for index,col in enumerate(color):
+    histogram = cv.calcHist([img],[index],None,[256],[0,256])
+    plt.plot(histogram,color = col)
     plt.xlim([0,256])
 plt.show()
 cv.waitKey(0)

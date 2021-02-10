@@ -6,19 +6,19 @@ from matplotlib import pyplot as plt
 from scipy.interpolate import interp1d
 import statistics
 
-max_size = 50
+maxSize = 100 
 
-def calcule_mean(img):
+def calculateMean(img):
     x,y,n = img.shape
     total = 0
     for a in range(0,y-1):
         for b in range(0,x-1):
             for k in range(0,n-1):
                 total = total + img.item(b,a,k)
-    calculate_mean = round(total/img.size,4)
-    return calculate_mean
+    calculatedMean = round(total/img.size,4)
+    return calculatedMean
 
-def calculate_contrast(img):
+def calculateContrast(img):
     x,y,n = img.shape
     total = 0
     for a in range(0,y-1):
@@ -34,9 +34,9 @@ def calculate_contrast(img):
     contrast = round(total/img.size,4)
     return contrast
 
-def calcule_variance(img,mean = -1):
+def calculateVariance(img,mean = -1):
     if mean == -1:
-        mean = calcule_mean(img)
+        mean = calculateMean(img)
     x,y,n = img.shape
     total = 0
     for a in range(0,y-1):
@@ -46,13 +46,13 @@ def calcule_variance(img,mean = -1):
     variance = round(total/img.size,4)
     return variance
 
-def calcule_deviation(img,variance = -1):
+def calculeDeviation(img,variance = -1):
     if variance == -1:
-        variance = calcule_variance(img)
+        variance = calculateVariance(img)
     return round(math.sqrt(variance),4)
 
 calcs = list()
-arr = os.listdir("./imgs")
+arr = os.listdir("./Frames")
 count = 0
 deviations = []
 contrasts = []
@@ -60,16 +60,16 @@ means = []
 times = []
 
 for file in arr:
-    if count == max_size:
+    if count == maxSize:
         break
-    img = cv.imread(f"imgs/{str(file)}")
+    img = cv.imread(f"Frames/{str(file)}")
     if img is not None:
         print("Img",str(count))
         val = np.reshape(img[:,:,1], -1)
-        mean = calcule_mean(img)
-        variance = calcule_variance(img,mean)
-        deviation = calcule_deviation(img,variance)
-        contrast = calculate_contrast(img)
+        mean = calculateMean(img)
+        variance = calculateVariance(img,mean)
+        deviation = calculeDeviation(img,variance)
+        contrast = calculateContrast(img)
         dic = {
             "name":file,
             "mean": mean,
@@ -119,18 +119,18 @@ for i in range(0,len(calcs)):
 plt.figure()
 
 plt.subplot(211)
-plt.plot(times,deviations,label = "deviations") 
+plt.plot(times,deviations,label = "Deviations") 
 plt.xlabel('frames')
-plt.plot(times,means,label = "mean")
-plt.plot(times,contrasts,label="contrast")
+plt.plot(times,means,label = "Mean")
+plt.plot(times,contrasts,label="Contrast")
 plt.legend() 
 
 plt.subplot(212)
 plt.ylim(-1, max(max(deviations),max(g_new)))
-plt.plot(times,deviations,label = "deviations") 
+plt.plot(times,deviations,label = "Deviations") 
 plt.xlabel('frames')
-plt.plot(times,g_new,label = "mean")
-plt.plot(times,h_new,label="contrast")
+plt.plot(times,g_new,label = "Mean")
+plt.plot(times,h_new,label="Contrast")
 plt.legend()
 
 d = 1/max(times) 

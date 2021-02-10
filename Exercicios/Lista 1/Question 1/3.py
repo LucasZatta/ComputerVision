@@ -1,19 +1,19 @@
 import cv2 as cv
 import numpy as np
 import math
-def calcule_mean(img):
+def calculateMean(img):
     x,y,n = img.shape
     total = 0
     for a in range(0,y-1):
         for b in range(0,x-1):
             for k in range(0,n-1):
                 total = total + img.item(b,a,k)
-    calculate_mean = round(total/img.size,4)
-    return calculate_mean
+    calculatedMean = round(total/img.size,4)
+    return calculatedMean
 
-def calcule_variance(img,mean = -1):
+def calculateVariance(img,mean = -1):
     if mean == -1:
-        mean = calcule_mean(img)
+        mean = calculateMean(img)
     x,y,n = img.shape
     total = 0
     for a in range(0,y-1):
@@ -23,25 +23,25 @@ def calcule_variance(img,mean = -1):
     variance = round(total/img.size,4)
     return variance
 
-def calcule_deviation(img,variance = -1):
+def calculateDeviation(img,variance = -1):
     if variance == -1:
-        variance = calcule_variance(img)
+        variance = calculateVariance(img)
     return round(math.sqrt(variance),4)
 
-img = cv.imread("./image.png")
+img = cv.imread("./landscape.png")
 overlay = img.copy()
 output = img.copy()
 size = 0.6
 
 val = np.reshape(img[:,:,0], -1)
-mean = calcule_mean(img)
+mean = calculateMean(img)
 img_mean = "Mean: " + str(mean)
-img_std = "Deviation: " + str(calcule_deviation(img))
+img_std = "Deviation: " + str(calculateDeviation(img))
 strXY = "Position: " 
 strBGR = "RGB: "
 strI = "Intesify: "
 #click event function
-def click_event(event, x, y, flags, param):
+def mouseEvent(event, x, y, flags, param):
     info = np.full((200, 200, 3), fill_val)
     overlay = img.copy()
     blue = img[y, x, 0]
@@ -66,6 +66,6 @@ cv.imshow("image", img)
 fill_val = np.array([0, 0, 0], np.uint8)
 info = np.full((200, 200, 3), fill_val)
 cv.imshow('window', info)
-cv.setMouseCallback("image", click_event)
-cv.waitKey(0)
+cv.setMouseCallback("image", mouseEvent)
+cv.waitKey(10000000)
 cv.destroyAllWindows()

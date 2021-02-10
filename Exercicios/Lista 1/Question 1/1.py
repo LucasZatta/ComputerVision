@@ -1,9 +1,10 @@
 import cv2 as cv
 import sys
-img = cv.imread("image.png")
+img = cv.imread("landscape.png")
 if img is None:
-    sys.exit("Could not read the image.")
-cv.imshow("Display window", img)
+    sys.exit("Error reading image")
+
+cv.imshow("Display image", img)
 
 cv.waitKey(0)
 cv.destroyAllWindows()

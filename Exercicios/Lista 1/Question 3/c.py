@@ -7,14 +7,17 @@ from scipy.interpolate import interp1d
 import statistics
 
 
+#transform image to frequency domain
 def transform(img):
     dft = cv.dft(np.float32(img),flags = cv.DFT_COMPLEX_OUTPUT)
     return dft
 
+#get phases and amplitude 
 def phases_amplitude(matrix):
     dft_shift = np.fft.fftshift(matrix)
     amplitude,phases = cv.cartToPolar(dft_shift[:,:,0],dft_shift[:,:,1])
     return phases,amplitude
+
 
 def re_transform(phases,amplitude):
     x,y = cv.polarToCart(amplitude,phases)
@@ -22,17 +25,16 @@ def re_transform(phases,amplitude):
     back_ishift = np.fft.ifftshift(back)
     img_back = cv.idft(back_ishift)
     img_back = cv.magnitude(img_back[:,:,0], img_back[:,:,1])
-    
     return img_back
 
 
-img_1 = cv.imread("p1.jpg",0)
-img_2 = cv.imread("p2.jpg",0)
+img_1 = cv.imread("Source/face1.jpg",0)
+img_2 = cv.imread("Source/face2.jpg",0)
 if img_1 is None or img_2 is None:
-    sys.exit("Could not read he image.")
+    sys.exit("Could not read one of the image.")
 
 phase_alpha = 0.9
-amplitude_alpha = 1000
+amplitude_alpha = 500000000000
 phase_operation = "*"
 amplitude_operation = "*"
 matrix_1 = transform(img_1)
@@ -81,5 +83,5 @@ plt.title('Phases Modify('+phase_operation+str(phase_alpha)+")"), plt.xticks([])
 plt.subplot(2,5,9),plt.imshow(new_img_M_2, cmap = 'gray')
 plt.title('Magnitude Modify('+amplitude_operation+str(amplitude_alpha)+")"), plt.xticks([]), plt.yticks([])
 mng = plt.get_current_fig_manager()
-mng.resize(*mng.window.maxsize())
+mng.full_screen_toggle()
 plt.show()

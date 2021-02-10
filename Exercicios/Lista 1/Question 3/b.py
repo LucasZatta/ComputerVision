@@ -25,9 +25,9 @@ def re_transform(phases,amplitude):
     return img_back
 
 
-img = cv.imread("messi.jpg",0)
+img = cv.imread("Source/kobe.jpg",0)
 if img is None:
-    sys.exit("Could not read he image.")
+    sys.exit("Could not read the image.")
 
 matrix = transform(img)
 rows,cols = img.shape
